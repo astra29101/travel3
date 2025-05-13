@@ -1,16 +1,17 @@
 
-# Aptos Token Transfer dApp
+# TravelQuest - Travel Booking Application
 
-A React-based dApp that:
-- Connects to Petra Wallet in the browser
-- Lets a user input another Aptos wallet address
-- Simulates sending APT tokens to the provided wallet address
-- Uses the Aptos Devnet for development and testing
+A React-based travel booking application that:
+- Allows users to browse destinations and packages
+- View and book travel packages with guides
+- Manage bookings and user profiles
+- Includes an admin dashboard for content management
 
 ## Features
-- Wallet connection with Petra Wallet
-- APT token transfer form
-- Transaction status display
+- User authentication and registration
+- Destination and package browsing
+- Guide selection and booking management
+- Secure payment processing
 - Responsive UI design
 
 ## Development

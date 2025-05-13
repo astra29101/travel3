@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -50,6 +51,18 @@ export type Tables = {
     price_per_day: number;
     image_url: string;
     destination_id: string;
+    created_at: string;
+    updated_at: string;
+  };
+  bookings: {
+    id: string;
+    user_id: string;
+    package_id: string;
+    guide_id: string;
+    start_date: string;
+    end_date: string;
+    total_cost: number;
+    status: string;
     created_at: string;
     updated_at: string;
   };
