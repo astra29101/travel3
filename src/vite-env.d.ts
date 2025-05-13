@@ -25,6 +25,8 @@ declare module 'src/context/AuthContext' {
   // This will handle the 'password' and 'supabase' unused variables
   interface AuthContextParams {
     password?: string; // Mark as optional to suppress the unused parameter error
+    signup: (name: string, email: string, password: string, age: number, location: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<void>;
   }
 }
 

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AddEditDestinationModal } from '../components/admin/AddEditDestinationModal';
 import { AddEditPackageModal } from '../components/admin/AddEditPackageModal';
@@ -118,230 +117,256 @@ const AdminPage: React.FC = () => {
     setEditingGuide(null);
   };
   
+  // Function to handle tab changes
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+  
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
       
       <Tabs>
         <TabsList>
-          <TabsTrigger value="destinations">Destinations</TabsTrigger>
-          <TabsTrigger value="packages">Packages</TabsTrigger>
-          <TabsTrigger value="guides">Guides</TabsTrigger>
+          <TabsTrigger 
+            value="destinations"
+            onClick={() => handleTabChange('destinations')}
+          >
+            Destinations
+          </TabsTrigger>
+          <TabsTrigger 
+            value="packages"
+            onClick={() => handleTabChange('packages')}
+          >
+            Packages
+          </TabsTrigger>
+          <TabsTrigger 
+            value="guides"
+            onClick={() => handleTabChange('guides')}
+          >
+            Guides
+          </TabsTrigger>
         </TabsList>
         
-        {/* Destinations Tab */}
-        <TabsContent value="destinations">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Destinations</h2>
-            <button
-              onClick={() => {
-                setEditingDestination(null);
-                setIsDestinationModalOpen(true);
-              }}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center"
-            >
-              <Plus className="h-4 w-4 mr-1" /> Add Destination
-            </button>
-          </div>
-          
-          {loadingDestinations ? (
-            <div className="text-center py-4">Loading destinations...</div>
-          ) : destinations.length === 0 ? (
-            <div className="text-center py-4">No destinations found.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border px-4 py-2 text-left">Name</th>
-                    <th className="border px-4 py-2 text-left">Category</th>
-                    <th className="border px-4 py-2 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {destinations.map((destination) => (
-                    <tr key={destination.id} className="hover:bg-gray-50">
-                      <td className="border px-4 py-2">{destination.name}</td>
-                      <td className="border px-4 py-2">{destination.category}</td>
-                      <td className="border px-4 py-2 text-right">
-                        <button
-                          onClick={() => handleEditDestination(destination)}
-                          className="text-blue-600 hover:text-blue-800 mr-2"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteDestination(destination.id)}
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* Destinations Tab - Only shown when activeTab is "destinations" */}
+        {activeTab === 'destinations' && (
+          <TabsContent value="destinations">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Destinations</h2>
+              <button
+                onClick={() => {
+                  setEditingDestination(null);
+                  setIsDestinationModalOpen(true);
+                }}
+                className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center"
+              >
+                <Plus className="h-4 w-4 mr-1" /> Add Destination
+              </button>
             </div>
-          )}
-        </TabsContent>
-        
-        {/* Packages Tab */}
-        <TabsContent value="packages">
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Select Destination:</label>
-            <select
-              className="w-full sm:w-64 p-2 border border-gray-300 rounded-md"
-              value={selectedDestinationId}
-              onChange={(e) => setSelectedDestinationId(e.target.value)}
-            >
-              <option value="">-- Select a destination --</option>
-              {destinations.map((dest) => (
-                <option key={dest.id} value={dest.id}>
-                  {dest.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          {selectedDestinationId && (
-            <>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Packages</h2>
-                <button
-                  onClick={() => {
-                    setEditingPackage(null);
-                    setIsPackageModalOpen(true);
-                  }}
-                  disabled={!selectedDestinationId}
-                  className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center"
-                >
-                  <Plus className="h-4 w-4 mr-1" /> Add Package
-                </button>
-              </div>
-              
-              {loadingPackages ? (
-                <div className="text-center py-4">Loading packages...</div>
-              ) : filteredPackages.length === 0 ? (
-                <div className="text-center py-4">No packages found for this destination.</div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="border px-4 py-2 text-left">Title</th>
-                        <th className="border px-4 py-2 text-left">Duration</th>
-                        <th className="border px-4 py-2 text-left">Price</th>
-                        <th className="border px-4 py-2 text-right">Actions</th>
+            
+            {loadingDestinations ? (
+              <div className="text-center py-4">Loading destinations...</div>
+            ) : destinations.length === 0 ? (
+              <div className="text-center py-4">No destinations found.</div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border px-4 py-2 text-left">Name</th>
+                      <th className="border px-4 py-2 text-left">Category</th>
+                      <th className="border px-4 py-2 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {destinations.map((destination) => (
+                      <tr key={destination.id} className="hover:bg-gray-50">
+                        <td className="border px-4 py-2">{destination.name}</td>
+                        <td className="border px-4 py-2">{destination.category}</td>
+                        <td className="border px-4 py-2 text-right">
+                          <button
+                            onClick={() => handleEditDestination(destination)}
+                            className="text-blue-600 hover:text-blue-800 mr-2"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteDestination(destination.id)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {filteredPackages.map((pkg) => (
-                        <tr key={pkg.id} className="hover:bg-gray-50">
-                          <td className="border px-4 py-2">{pkg.title}</td>
-                          <td className="border px-4 py-2">{pkg.duration} days</td>
-                          <td className="border px-4 py-2">${pkg.price}</td>
-                          <td className="border px-4 py-2 text-right">
-                            <button
-                              onClick={() => handleEditPackage(pkg)}
-                              className="text-blue-600 hover:text-blue-800 mr-2"
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => deletePackage(pkg.id)}
-                              className="text-red-600 hover:text-red-800"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </>
-          )}
-        </TabsContent>
-        
-        {/* Guides Tab */}
-        <TabsContent value="guides">
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Select Destination:</label>
-            <select
-              className="w-full sm:w-64 p-2 border border-gray-300 rounded-md"
-              value={selectedDestinationId}
-              onChange={(e) => setSelectedDestinationId(e.target.value)}
-            >
-              <option value="">-- Select a destination --</option>
-              {destinations.map((dest) => (
-                <option key={dest.id} value={dest.id}>
-                  {dest.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          {selectedDestinationId && (
-            <>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Guides</h2>
-                <button
-                  onClick={() => {
-                    setEditingGuide(null);
-                    setIsGuideModalOpen(true);
-                  }}
-                  disabled={!selectedDestinationId}
-                  className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center"
-                >
-                  <Plus className="h-4 w-4 mr-1" /> Add Guide
-                </button>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              
-              {loadingGuides ? (
-                <div className="text-center py-4">Loading guides...</div>
-              ) : filteredGuides.length === 0 ? (
-                <div className="text-center py-4">No guides found for this destination.</div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-gray-100">
-                        <th className="border px-4 py-2 text-left">Name</th>
-                        <th className="border px-4 py-2 text-left">Experience</th>
-                        <th className="border px-4 py-2 text-left">Rate</th>
-                        <th className="border px-4 py-2 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredGuides.map((guide) => (
-                        <tr key={guide.id} className="hover:bg-gray-50">
-                          <td className="border px-4 py-2">{guide.name}</td>
-                          <td className="border px-4 py-2">{guide.experience_years} years</td>
-                          <td className="border px-4 py-2">${guide.price_per_day}/day</td>
-                          <td className="border px-4 py-2 text-right">
-                            <button
-                              onClick={() => handleEditGuide(guide)}
-                              className="text-blue-600 hover:text-blue-800 mr-2"
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => deleteGuide(guide.id)}
-                              className="text-red-600 hover:text-red-800"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+            )}
+          </TabsContent>
+        )}
+        
+        {/* Packages Tab - Only shown when activeTab is "packages" */}
+        {activeTab === 'packages' && (
+          <TabsContent value="packages">
+            <div className="mb-6">
+              <label className="block mb-2 font-medium">Select Destination:</label>
+              <select
+                className="w-full sm:w-64 p-2 border border-gray-300 rounded-md"
+                value={selectedDestinationId}
+                onChange={(e) => setSelectedDestinationId(e.target.value)}
+              >
+                <option value="">-- Select a destination --</option>
+                {destinations.map((dest) => (
+                  <option key={dest.id} value={dest.id}>
+                    {dest.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {selectedDestinationId && (
+              <>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold">Packages</h2>
+                  <button
+                    onClick={() => {
+                      setEditingPackage(null);
+                      setIsPackageModalOpen(true);
+                    }}
+                    disabled={!selectedDestinationId}
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center"
+                  >
+                    <Plus className="h-4 w-4 mr-1" /> Add Package
+                  </button>
                 </div>
-              )}
-            </>
-          )}
-        </TabsContent>
+                
+                {loadingPackages ? (
+                  <div className="text-center py-4">Loading packages...</div>
+                ) : filteredPackages.length === 0 ? (
+                  <div className="text-center py-4">No packages found for this destination.</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="bg-gray-100">
+                          <th className="border px-4 py-2 text-left">Title</th>
+                          <th className="border px-4 py-2 text-left">Duration</th>
+                          <th className="border px-4 py-2 text-left">Price</th>
+                          <th className="border px-4 py-2 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredPackages.map((pkg) => (
+                          <tr key={pkg.id} className="hover:bg-gray-50">
+                            <td className="border px-4 py-2">{pkg.title}</td>
+                            <td className="border px-4 py-2">{pkg.duration} days</td>
+                            <td className="border px-4 py-2">${pkg.price}</td>
+                            <td className="border px-4 py-2 text-right">
+                              <button
+                                onClick={() => handleEditPackage(pkg)}
+                                className="text-blue-600 hover:text-blue-800 mr-2"
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => deletePackage(pkg.id)}
+                                className="text-red-600 hover:text-red-800"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+          </TabsContent>
+        )}
+        
+        {/* Guides Tab - Only shown when activeTab is "guides" */}
+        {activeTab === 'guides' && (
+          <TabsContent value="guides">
+            <div className="mb-6">
+              <label className="block mb-2 font-medium">Select Destination:</label>
+              <select
+                className="w-full sm:w-64 p-2 border border-gray-300 rounded-md"
+                value={selectedDestinationId}
+                onChange={(e) => setSelectedDestinationId(e.target.value)}
+              >
+                <option value="">-- Select a destination --</option>
+                {destinations.map((dest) => (
+                  <option key={dest.id} value={dest.id}>
+                    {dest.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {selectedDestinationId && (
+              <>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold">Guides</h2>
+                  <button
+                    onClick={() => {
+                      setEditingGuide(null);
+                      setIsGuideModalOpen(true);
+                    }}
+                    disabled={!selectedDestinationId}
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg flex items-center"
+                  >
+                    <Plus className="h-4 w-4 mr-1" /> Add Guide
+                  </button>
+                </div>
+                
+                {loadingGuides ? (
+                  <div className="text-center py-4">Loading guides...</div>
+                ) : filteredGuides.length === 0 ? (
+                  <div className="text-center py-4">No guides found for this destination.</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="bg-gray-100">
+                          <th className="border px-4 py-2 text-left">Name</th>
+                          <th className="border px-4 py-2 text-left">Experience</th>
+                          <th className="border px-4 py-2 text-left">Rate</th>
+                          <th className="border px-4 py-2 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredGuides.map((guide) => (
+                          <tr key={guide.id} className="hover:bg-gray-50">
+                            <td className="border px-4 py-2">{guide.name}</td>
+                            <td className="border px-4 py-2">{guide.experience_years} years</td>
+                            <td className="border px-4 py-2">${guide.price_per_day}/day</td>
+                            <td className="border px-4 py-2 text-right">
+                              <button
+                                onClick={() => handleEditGuide(guide)}
+                                className="text-blue-600 hover:text-blue-800 mr-2"
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => deleteGuide(guide.id)}
+                                className="text-red-600 hover:text-red-800"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+          </TabsContent>
+        )}
       </Tabs>
       
       {isDestinationModalOpen && (
