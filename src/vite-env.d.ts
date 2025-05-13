@@ -35,3 +35,8 @@ declare module 'src/pages/PackageDetailsPage' {
   import { MapPin } from 'lucide-react';
   export { MapPin };
 }
+
+// Add declaration for Lovable tagger
+declare module 'lovable-tagger' {
+  export function componentTagger(): any;
+}

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { AddEditDestinationModal } from '../components/admin/AddEditDestinationModal';
 import { AddEditPackageModal } from '../components/admin/AddEditPackageModal';
@@ -8,7 +9,7 @@ import { useGuides } from '../hooks/useGuides';
 import { Tables } from '../lib/supabase';
 import { Pencil, Trash2, Plus } from 'lucide-react';
 
-// Since we don't have direct access to shadcn/ui tabs, let's create a simple tabs implementation
+// Custom Tabs implementation
 const Tabs = ({ children }: { children: React.ReactNode }) => {
   return <div>{children}</div>;
 };
@@ -17,18 +18,25 @@ const TabsList = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex space-x-2 mb-6 border-b">{children}</div>;
 };
 
-const TabsTrigger = ({ value, children }: { value: string, children: React.ReactNode }) => {
+interface TabsTriggerProps {
+  value: string;
+  children: React.ReactNode;
+  onTabChange: (value: string) => void;
+}
+
+const TabsTrigger = ({ value, children, onTabChange }: TabsTriggerProps) => {
   return (
     <button 
       className="px-4 py-2 text-gray-600 hover:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-300 focus:border-cyan-600"
       value={value}
+      onClick={() => onTabChange(value)}
     >
       {children}
     </button>
   );
 };
 
-const TabsContent = ({ value, children }: { value: string, children: React.ReactNode }) => {
+const TabsContent = ({ value, children }: { value: string; children: React.ReactNode }) => {
   return <div data-value={value}>{children}</div>;
 };
 
@@ -130,19 +138,19 @@ const AdminPage: React.FC = () => {
         <TabsList>
           <TabsTrigger 
             value="destinations"
-            onClick={() => handleTabChange('destinations')}
+            onTabChange={handleTabChange}
           >
             Destinations
           </TabsTrigger>
           <TabsTrigger 
             value="packages"
-            onClick={() => handleTabChange('packages')}
+            onTabChange={handleTabChange}
           >
             Packages
           </TabsTrigger>
           <TabsTrigger 
             value="guides"
-            onClick={() => handleTabChange('guides')}
+            onTabChange={handleTabChange}
           >
             Guides
           </TabsTrigger>
