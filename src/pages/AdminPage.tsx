@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { AddEditDestinationModal } from '../components/admin/AddEditDestinationModal';
 import { AddEditPackageModal } from '../components/admin/AddEditPackageModal';
@@ -9,7 +10,7 @@ import { Tables } from '../lib/supabase';
 import { Pencil, Trash2, Plus } from 'lucide-react';
 
 // Since we don't have direct access to shadcn/ui tabs, let's create a simple tabs implementation
-const Tabs = ({ defaultValue, onValueChange, children }: { defaultValue: string, onValueChange: (value: string) => void, children: React.ReactNode }) => {
+const Tabs = ({ children }: { children: React.ReactNode }) => {
   return <div>{children}</div>;
 };
 
@@ -121,8 +122,8 @@ const AdminPage: React.FC = () => {
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
       
-      <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-6">
+      <Tabs>
+        <TabsList>
           <TabsTrigger value="destinations">Destinations</TabsTrigger>
           <TabsTrigger value="packages">Packages</TabsTrigger>
           <TabsTrigger value="guides">Guides</TabsTrigger>

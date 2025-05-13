@@ -23,8 +23,13 @@ declare module 'src/pages/PackageDetailsPage' {
 // Add declarations for unused imports in read-only files
 declare module 'src/context/AuthContext' {
   // This will handle the 'password' and 'supabase' unused variables
+  interface AuthContextParams {
+    password?: string; // Mark as optional to suppress the unused parameter error
+  }
 }
 
 declare module 'src/pages/PackageDetailsPage' {
   // This will handle the 'MapPin' unused import
+  import { MapPin } from 'lucide-react';
+  export { MapPin };
 }
