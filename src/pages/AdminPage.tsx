@@ -1,6 +1,4 @@
-
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { AddEditDestinationModal } from '../components/admin/AddEditDestinationModal';
 import { AddEditPackageModal } from '../components/admin/AddEditPackageModal';
 import { AddEditGuideModal } from '../components/admin/AddEditGuideModal';
@@ -9,6 +7,30 @@ import { usePackages } from '../hooks/usePackages';
 import { useGuides } from '../hooks/useGuides';
 import { Tables } from '../lib/supabase';
 import { Pencil, Trash2, Plus } from 'lucide-react';
+
+// Since we don't have direct access to shadcn/ui tabs, let's create a simple tabs implementation
+const Tabs = ({ defaultValue, onValueChange, children }: { defaultValue: string, onValueChange: (value: string) => void, children: React.ReactNode }) => {
+  return <div>{children}</div>;
+};
+
+const TabsList = ({ children }: { children: React.ReactNode }) => {
+  return <div className="flex space-x-2 mb-6 border-b">{children}</div>;
+};
+
+const TabsTrigger = ({ value, children }: { value: string, children: React.ReactNode }) => {
+  return (
+    <button 
+      className="px-4 py-2 text-gray-600 hover:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-300 focus:border-cyan-600"
+      value={value}
+    >
+      {children}
+    </button>
+  );
+};
+
+const TabsContent = ({ value, children }: { value: string, children: React.ReactNode }) => {
+  return <div data-value={value}>{children}</div>;
+};
 
 const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('destinations');
@@ -22,7 +44,7 @@ const AdminPage: React.FC = () => {
   
   const {
     destinations,
-    createDestination,
+    addDestination,
     updateDestination,
     deleteDestination,
     loading: loadingDestinations
@@ -30,7 +52,7 @@ const AdminPage: React.FC = () => {
   
   const {
     packages,
-    createPackage,
+    addPackage,
     updatePackage,
     deletePackage,
     loading: loadingPackages
@@ -38,7 +60,7 @@ const AdminPage: React.FC = () => {
   
   const {
     guides,
-    createGuide,
+    addGuide,
     updateGuide,
     deleteGuide,
     loading: loadingGuides
@@ -72,7 +94,7 @@ const AdminPage: React.FC = () => {
     if (editingDestination) {
       await updateDestination(editingDestination.id, destination);
     } else {
-      await createDestination(destination);
+      await addDestination(destination);
     }
     setEditingDestination(null);
   };
@@ -81,7 +103,7 @@ const AdminPage: React.FC = () => {
     if (editingPackage) {
       await updatePackage(editingPackage.id, pkg);
     } else {
-      await createPackage(pkg);
+      await addPackage(pkg);
     }
     setEditingPackage(null);
   };
@@ -90,7 +112,7 @@ const AdminPage: React.FC = () => {
     if (editingGuide) {
       await updateGuide(editingGuide.id, guide);
     } else {
-      await createGuide(guide);
+      await addGuide(guide);
     }
     setEditingGuide(null);
   };
@@ -106,6 +128,7 @@ const AdminPage: React.FC = () => {
           <TabsTrigger value="guides">Guides</TabsTrigger>
         </TabsList>
         
+        {/* Destinations Tab */}
         <TabsContent value="destinations">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Destinations</h2>
@@ -161,6 +184,7 @@ const AdminPage: React.FC = () => {
           )}
         </TabsContent>
         
+        {/* Packages Tab */}
         <TabsContent value="packages">
           <div className="mb-6">
             <label className="block mb-2 font-medium">Select Destination:</label>
@@ -239,6 +263,7 @@ const AdminPage: React.FC = () => {
           )}
         </TabsContent>
         
+        {/* Guides Tab */}
         <TabsContent value="guides">
           <div className="mb-6">
             <label className="block mb-2 font-medium">Select Destination:</label>

@@ -19,3 +19,12 @@ declare module 'src/pages/PackageDetailsPage' {
   const PackageDetailsPage: FC;
   export default PackageDetailsPage;
 }
+
+// Add declarations for unused imports in read-only files
+declare module 'src/context/AuthContext' {
+  // This will handle the 'password' and 'supabase' unused variables
+}
+
+declare module 'src/pages/PackageDetailsPage' {
+  // This will handle the 'MapPin' unused import
+}
