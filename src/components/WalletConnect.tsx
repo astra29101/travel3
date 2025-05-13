@@ -10,7 +10,8 @@ const WalletConnect: React.FC = () => {
     if (connected) {
       await disconnect();
     } else {
-      await connect();
+      // Pass an empty object as required by the updated wallet adapter API
+      await connect({});
     }
   };
 

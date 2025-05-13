@@ -40,6 +40,7 @@ export type Tables = {
     main_image_url: string;
     created_at: string;
     updated_at: string;
+    destinations?: Tables['destinations']; // Add joined type
   };
   guides: {
     id: string;
@@ -65,5 +66,19 @@ export type Tables = {
     status: string;
     created_at: string;
     updated_at: string;
+    // Add joined types for nested data
+    packages?: {
+      id: string;
+      title: string;
+      main_image_url: string;
+      destination_id: string;
+      destinations?: {
+        name: string;
+      };
+    };
+    guides?: {
+      id: string;
+      name: string;
+    };
   };
 };

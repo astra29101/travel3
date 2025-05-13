@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Clock, MapPin, Star } from 'lucide-react';
+import { ArrowLeft, Clock, Star } from 'lucide-react';
 import { useDestinations } from '../hooks/useDestinations';
 import { usePackages } from '../hooks/usePackages';
 
